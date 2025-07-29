@@ -30,6 +30,9 @@ python CreateAnnotation.py
 #### Create metagene plots
 
 ```
+python metagene.py Ribo.bam ./Ribo
 python readdist.py Ribo.bam ./Ribo
 python readend.py Ribo.bam ./Ribo
+python regioncount.py Ribo.bam ./Ribo
+python regioncount_DE.py Ribo.bam ./Ribo
 ```
