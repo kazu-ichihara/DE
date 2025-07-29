@@ -32,37 +32,36 @@ for n in [0,1]:
         ex = exon_dict[name].values
         chrom = ex[0][1]
         strand = ex[0][5]
-        exon = np.zeros(0)
+        exon = []
         m = nascent.loc[name]['start']
         left = m-150
         right = m+250
         if strand == '+':
-            for i in range(len(ex)):
-                exon = np.concatenate([exon, np.arange(ex[i][3], ex[i][4]+1)])
+            for e in ex:
+                exon.append(np.arange(e[3], e[4] + 1))
+            exon = np.concatenate(exon)
             exon_meta = exon[left:right]
+            pos_to_index = {pos: i for i, pos in enumerate(exon_meta)}
             left_pos = exon_meta[0]
             right_pos = exon_meta[-1]
             if len(exon_meta) == 400:
                 for read in bamfile.fetch(chrom, left_pos, right_pos):
                     ps = np.array(read.get_reference_positions())
-                    ps = ps[0]
-                    ps = ps[np.isin(ps, exon_meta)]
-                    pe = [np.where(exon_meta == x)[0][0] for x in ps]
-                    for p in pe:
-                        meta[p] += 1
+                    p = ps[0]
+                    if p in exon_meta:
+                        np.add.at(meta, pos_to_index[p], 1)
         else:
-            for i in range(len(ex)):
-                exon = np.concatenate([exon, np.arange(ex[i][3], ex[i][4]+1)[::-1]])
+            for e in ex:
+                exon.append(np.arange(e[3], e[4] + 1)[::-1])
+            exon = np.concatenate(exon)
             exon_meta = exon[left:right]
+            pos_to_index = {pos: i for i, pos in enumerate(exon_meta)}
             left_pos = exon_meta[0]
             right_pos = exon_meta[-1]
             if len(exon_meta) == 400:
                 for read in bamfile.fetch(chrom, right_pos, left_pos):
                     ps = np.array(read.get_reference_positions())
-                    ps = ps[-1]+2
-                    ps = ps[np.isin(ps, exon_meta)]
-                    pe = [np.where(exon_meta == x)[0][0] for x in ps]
-                    for p in pe:
-                        meta[p] += 1
-    outpath = './' + filename + '_end_' + key
-    np.save(outpath, meta)
+                    p = ps[-1]+2
+                    if p in exon_meta:
+                        np.add.at(meta, pos_to_index[p], 1)
+    np.save(outpath + '_end_' + key, meta)

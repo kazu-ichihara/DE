@@ -1,6 +1,6 @@
 # README for DE
 
-2025-7-25 Kazuya Ichihara
+2025-7-29 Kazuya Ichihara
 
 #### Python packages
 
@@ -10,6 +10,7 @@
 * Scipy 1.4.0rc1
 * Pandas 0.25.3
 * Biopython 1.75
+* OpenCV 3.4.2
 
 #### Obtain genome annotation files
 
@@ -18,7 +19,6 @@
 ```bash
 wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz
 wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.transcripts.fa.gz
-wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/GRCh38.primary_assembly.genome.fa.gz
 ```
 
 #### Prepare annotation files
